@@ -351,3 +351,26 @@ Baca file-file ini secara berurutan supaya paham sistem dari yang paling dasar:
 - **JWT_SECRET default.** Nilai default di `src/config.js` hanya untuk belajar.
   Kalau dipakai sungguhan, wajib diisi lewat file `.env` dengan string acak
   yang panjang (lihat `.env.example`).
+
+## Deploy ke Vercel (Hobby, gratis, tanpa kartu kredit)
+
+Vercel Hobby adalah satu-satunya hosting gratis tanpa kartu yang masih
+berlaku per November 2026 (riset lengkap: `Riset_Hosting_Gratis_TANGGAP.md`
+di folder user files). Tapi Vercel itu serverless, bukan server persisten,
+jadi ada adaptasi:
+
+- Entry point: `api/index.js` mengekspor aplikasi Express dari
+  `backend/src/index.js` (tanpa `app.listen()`).
+- Routing: `vercel.json` meneruskan `/api/*` ke function dan route lain
+  ke `index.html` (SPA fallback). File statis disajikan dari
+  `frontend/dist`.
+- Env var di dashboard Vercel (Production):
+  `NODE_ENV=production`, `JWT_SECRET=<string acak>`,
+  `DB_PATH=/tmp/tanggap.db`, `HOST=0.0.0.0`.
+- Database: `/tmp` adalah satu-satunya folder yang bisa ditulis.
+  Tiap cold start database dibuat ulang + di-seed (7 laporan contoh),
+  jadi laporan yang dibuat user tidak awet. Sama seperti restart di
+  Render free, tapi lebih sering terjadi.
+- Deploy Render tetap bisa dipakai (lihat `render.yaml`); kode yang
+  sama jalan di keduanya karena `app.listen()` hanya aktif saat
+  `backend/src/index.js` dieksekusi langsung (`npm start`).

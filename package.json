@@ -1,0 +1,1 @@
+{"description":"TANGGAP - sistem helpdesk internal (proyek belajar). File ini hanya menandai repo sebagai ESM supaya api/index.js (entry point Vercel serverless) bisa memakai import, dan mengunci Node 20 supaya better-sqlite3 memakai prebuild yang cocok.","engines":{"node":"20.x"},"name":"tanggap","private":true,"type":"module","version":"1.0.0"}

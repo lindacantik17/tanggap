@@ -102,11 +102,23 @@ if (fs.existsSync(frontendDist)) {
   console.log('  Frontend disajikan dari:', frontendDist);
 }
 
-// 9. Jalankan server.
-app.listen(config.port, config.host, () => {
-  console.log('');
-  console.log('  TANGGAP Backend berjalan');
-  console.log(`  http://${config.host}:${config.port}`);
-  console.log('  Akun demo: admin/admin123 (admin), petugas1/petugas123 (petugas)');
-  console.log('');
-});
+// 9. Jalankan server — hanya kalau file ini dijalankan langsung
+//    (`node src/index.js`, misal lewat `npm start`).
+//    Kalau file ini DIIMPOR (misal oleh api/index.js untuk Vercel
+//    serverless), server tidak dijalankan; platform yang memanggil
+//    aplikasi Express ini per request.
+const dijalankanLangsung =
+  process.argv[1] === fileURLToPath(import.meta.url);
+if (dijalankanLangsung) {
+  app.listen(config.port, config.host, () => {
+    console.log('');
+    console.log('  TANGGAP Backend berjalan');
+    console.log(`  http://${config.host}:${config.port}`);
+    console.log('  Akun demo: admin/admin123 (admin), petugas1/petugas123 (petugas)');
+    console.log('');
+  });
+}
+
+// Ekspor aplikasi supaya bisa dipakai sebagai serverless function
+// (Vercel) tanpa mengubah perilaku saat dijalankan biasa.
+export default app;
