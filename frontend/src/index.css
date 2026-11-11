@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/*
+ * TANGGAP — gaya dasar.
+ *
+ * Desain: mengikuti mockup aplikasi Flutter TANGGAP yang dikirim Linda.
+ * Warna utama: biru (#2563EB / blue-600) dengan latar biru muda (#eff6ff).
+ * Logo headset + tagline "Lapor Kendala, Kami Tindaklanjuti".
+ * Kartu putih, teks slate, sudut membulat. Sengaja TIDAK memakai
+ * gradient ungu dan emoji berlebihan.
+ */
+
+@theme {
+  --font-sans: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+html {
+  font-family: var(--font-sans);
+}
+
+body {
+  background-color: #eff6ff; /* blue-50 — latar biru muda seperti mockup */
+  color: #0f172a; /* slate-900 */
+}

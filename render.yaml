@@ -1,0 +1,45 @@
+# render.yaml — Blueprint Render untuk TANGGAP (proyek belajar).
+#
+# CARA PAKAI (sekali klik):
+#   1. Push repo ini ke GitHub.
+#   2. Buka https://dashboard.render.com/blueprints/new
+#      lalu pilih repo ini, atau klik tombol "Deploy to Render" di README.
+#   3. Render membuat SATU Web Service gratis yang menjalankan backend
+#      sekaligus menyajikan frontend (lihat backend/src/index.js bagian 8).
+#   4. Selesai: buka URL https://tanggap.onrender.com (nama bisa beda).
+#
+# KENAPA SATU SERVICE SAJA?
+# Backend Express sudah menyajikan file hasil build frontend (frontend/dist)
+# sehingga API (/api/...) dan halaman web berasal dari origin yang sama.
+# Tidak ada masalah CORS dan tidak perlu mengatur URL API di frontend.
+#
+# CATATAN FREE TIER (penting untuk dipahami):
+# - Service gratis akan "tidur" setelah 15 menit tidak dipakai; request
+#   pertama setelah tidur butuh ~30-60 detik untuk bangun. Ini normal.
+# - File database SQLite (backend/data/tanggap.db) tinggal di disk yang
+#   TIDAK persisten di free tier: kalau service restart, data laporan yang
+#   dibuat user akan hilang dan kembali ke 7 laporan contoh (seed otomatis).
+#   Itu tidak apa-apa untuk proyek belajar; kalau mau data awet, butuh
+#   database persisten (misal Render PostgreSQL, berbayar) — di luar
+#   cakupan proyek belajar ini.
+
+services:
+  - type: web
+    name: tanggap
+    env: node
+    plan: free
+    buildCommand: npm install --prefix backend && npm install --prefix frontend && npm run build --prefix frontend
+    startCommand: npm start --prefix backend
+    envVars:
+      # Node 20: better-sqlite3 punya prebuild untuk versi ini, jadi
+      # `npm install` tidak perlu compile dari source.
+      - key: NODE_VERSION
+        value: 20
+      - key: NODE_ENV
+        value: production
+      # Render hanya bisa mengecek service yang listen di 0.0.0.0.
+      - key: HOST
+        value: 0.0.0.0
+      # Secret JWT dibuat acak oleh Render (jangan tulis manual di sini).
+      - key: JWT_SECRET
+        generateValue: true
